@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 (x64) (http://www.altova.com) by Ryan Clark (private) -->
+<xs:schema xmlns:aasg="http://stategeothermaldata.org/uri-gin/aasg/xmlschema/geothermometry/2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml" xmlns:gmlsf="http://www.opengis.net/gmlsf" targetNamespace="http://stategeothermaldata.org/uri-gin/aasg/xmlschema/geothermometry/2.0" elementFormDefault="qualified" version="2.0">
+	<xs:import namespace="http://www.opengis.net/gml" schemaLocation="http://schemas.opengis.net/gml/3.1.1/base/gml.xsd"/>
+	<xs:import namespace="http://www.opengis.net/gmlsf" schemaLocation="http://schemas.opengis.net/gml/3.1.1/profiles/gmlsfProfile/1.0.0/gmlsfLevels.xsd"/>
+	<xs:annotation>
+		<!--This XSD document, including XML schema, have been tailored for use in the analysis formulated by Powell and Cumming, 2010. Analytes reported with this content model match those in the Powell and Cumming, 2010 spreadsheets and can be directly inputted into their model, which creates numerous ternary diagrams and other Excel graphics to create a geothermomerty report. Citation: Powell, Tom and Cumming, William 2010. Spreadsheets for Geothermal Water and Gas Geochemistry. Thirty-Fifth Workshop on Geothermal Reservoir Engineering Stanford University, Stanford, California, February 1-3, 2010. SGP-TR-188.  Access the paper and spreadsheets (to generate report) here: http://repository.stategeothermaldata.org/repository/resource/9e15e1a59b768b330d029e86dc023a37/.-->
+		<!--Version 2.0 renamed from PowellCummingsGeothermometry to PowellCummingGeothermometry. Version 0.1.2 changed date types to 'dateTime'. Annotated version 0.1.1. This XSD document was created on 2013-01-07 by Christy Caudill, AZGS. Field Description annotations standardized 2013-08-22 by Esty Pape, AZGS.-->
+		<xs:appinfo source="http://schemas.opengis.net/gml/3.1.1/profiles/gmlsfProfile/1.0.0/gmlsfLevels.xsd">
+			<gmlsf:ComplianceLevel>0</gmlsf:ComplianceLevel>
+			<gmlsf:GMLProfileSchema>
+http://schemas.opengis.net/gml/3.1.1/profiles/gmlsfProfile/1.0.0/gmlsf.xsd </gmlsf:GMLProfileSchema>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:element name="GasAnalysis" type="aasg:GasAnalysisType" substitutionGroup="gml:_Feature"/>
+	<xs:element name="LiquidAnalysis" type="aasg:LiquidAnalysisType" substitutionGroup="gml:_Feature"/>
+	<xs:complexType name="SampleAnalysisCommonType">
+		<xs:complexContent>
+			<xs:extension base="gml:AbstractFeatureType">
+				<xs:sequence>
+					<xs:element name="OBJECTID" type="xs:int" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Integer record count, added by ArcGIS servers during service deployment; not required but cannot be removed when deploying from ArcGIS feature class. Not user maintained, so this element appears in XML implementation but not in the Content Model Template.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AnalysisURI">
+						<xs:annotation>
+							<xs:documentation>A unique identifier for a discrete analysis of a specimen taken from a feature. The feature from which the specimen was taken will be identified by its own URI.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="AnalysisName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Other human-intelligible labels for analysis such as secondary name or common name, other spellings. Indicate the authority from which the OtherName is derived with a short (lower case) prefix delimited by a colon ':' If identifiers from multiple different authorities are available, delimit these identifiers with the pipe character '|'. For example, if a well were known to the Arizona Geological Survey (AZGS) by the id number 1337, the identifier string would be azgs:1337. Any such prefixes used to scope identifiers should be explained in the dataset metadata. (If there are multiple analyses performed on a single sample, each analysis would correspond to a new line of data in the template.)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Notes" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Any additional information to be provided, including description and other data not captured by the template, details about methods, contact information for related parties (original collector, project PI), collection platform or Launch, etc.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SamplingFeatureName" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Common or human-readable name by which the feature is known. Recommend using only web-safe characters (a-z A-Z 0-9 _-.) in the name. Be consistent in the naming convention used within any given dataset.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SamplingFeatureURI">
+						<xs:annotation>
+							<xs:documentation>Unique Identifier for the particular site (station) or well where the sample(s) came from. For wells, this might be the HeaderURI or API number used in other metadata files. If unavailable, state 'missing'. SamplingFeature is a concept that represents the feature that accesses the part of the Earth from which the sample came, e.g. outcrop, borehole, dredge haul.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="OtherSiteID" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Additional information or more geographic names associated with sample collection location; if multiple names supplied, delimit with pipe '|' character, e.g. Arizona | La Paz County | Harquahala Mountains | Browns Canyon.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SpecimenID" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>ID given to the specimen by the collector(s). Recommended practice: include a short abbreviation in a prefix indicating the authority or scope of the identifier (e.g. 'usgs:'); any prefixes should be explained in the dataset metadata.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Label" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Short text string to identify/characterize the samples used in this observation; may include one or more sample names as provided by the sample collector or analyzing laboratory.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SpecimenDescription" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Free text description of sample, including size, weight, quality, lithology, locality, etc.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SpecimenURI" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Unique identifier for sample; should include protocol prefix with known meaning, delimited by a ':' (colon), e.g. igsn:24623570 or http://resources.usgin.org/uri-gin/AZGS/sample/24623570.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="SpecimenCollectionDate" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Date for the record: date on which observation, measurement or test was made or specimen was collected. Day, month and year must be specified; Excel will display using ISO 8601 date and time (yyyy-mm-ddT:hh:mm) format. If only the year is known, enter month and day as 'Jan. 1', (or '1/1/', or '1-1-', or 'January 1,'). All dates will be converted to yyyy-mm-ddThh:mm.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SpecimenCollectionMethod" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Text description of the process used to collect the analyzed specimen. Include any keywords that may typically be used to categorize sampling procedures.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="OtherAnalyticalData" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Text describing other analytical data associated with the analyzed specimen. Best practice: include a URI for observation records reporting related results.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FluidTemperature_C" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Temperature, in decimal format. Degrees Celsius is preferred and will be reported for consistency in service implementations.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Discharge" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Average measured volume of water per unit of time.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DischargeUnits" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Units for flow rate, either gallons per minute (gpm) or liters per minute (lpm).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="County" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Required. County name. If unknown or not applicable use 'missing'. If offshore, specify 'offshore' in this field.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="State" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Required. State name without abbreviations. If unknown or not applicable use 'missing'. For offshore locations, specify the governing or nearest state and list the county as 'offshore'.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LatDegree" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Latitude coordinate for the surface location of the feature (use center point for areas); values should be provided with at least 4 significant digits for sufficient precision (7 decimal places is recommended by the USGS (OFR 02-463, p. 6). Use decimal degrees.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LongDegree" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Longitude coordinate for the surface location of the feature (use center point for areas); values should be provided with at least 4 significant digits for sufficient precision (7 decimal places is recommended by the USGS (OFR 02-463, p. 6). Use decimal degrees.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SRS" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>The spatial reference system. It is recommended that an EPSG code be used to identify the SRS used to specify the location.  If an EPSG code is used, identify it as such with the prefix 'EPSG:' EPSG:4326 is the identifier for WGS84, and should be the text in this field. EPSG stands for European Petroleum Survey Group. EPSSG codes can be dereferenced by putting the code in this URL (replace 4326) http://spatialreference.org/ref/epsg/4326/.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LocationUncertaintyStatement" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Information on how the original location was determined, e.g.: 1:250,000 map, gps unit, Google Earth, PLSS Conversion, Spatial Datum Conversion, e.g., NAD27 to WGS84.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PLSSMeridians" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>List north-south baseline and east-west meridian that Townships and Ranges are referenced to.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Township" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Township in PLSS grid, relative to reported baseline. Formatting and punctuation should be consistent for all locations referenced to the same baseline and meridian. Recommend adding leading '0's so that all number strings are the same length (typically 2 or occasionally 3 digits). Examples 01N, 112S, 001N.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Range" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Range in PLSS grid, relative to reported meridian. Formatting and punctuation should be consistent for all locations referenced to the same baseline meridian. See instructions on TWP field.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Section_" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>PLSS section number. Must be numeric or null. Some surveys include half sections indicated by a 'nn.5' designation, where n indicates a number.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SectionPart" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Subdivision of a PLSS section.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Elevation" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Elevation at ground level for the feature. 3 decimal places is recommended by the USGS (OFR 02-463, p.6). Elevations should be reported relative to mean sea level (MSL). </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ElevationDatum" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The point of reference against which elevation measurements are made. Best practice: use mean sea level (MSL) as datum.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ElevationUnits" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Units used to report all elevation and depth information.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Source" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Mandatory. Short text explanation of source of information defining this feature or record; may be author-date type citation, well log, report, data files etc., but should include some indication of how digital data originated. If unpublished data, provide researcher name, date and research institution for proper citation. Separate multiple citations with pipe '|' character.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="MetadataURI" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>URI identifying (and ideally dereferencing to get) a full formal metadata record for the observation report. A time series of observations may all reference the same metadata record that provides contact information and details on procedure, etc.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="255"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="AnalysisType" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Type of analysis used to obtain the results in this record.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="AnalysisDate" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Date for the record: date on which observation, measurement or test was made or specimen was collected. Day, month and year must be specified; Excel will display using ISO 8601 date and time (yyyy-mm-ddT:hh:mm) format. If only the year is known, enter month and day as 'Jan. 1', (or '1/1/', or '1-1-', or 'January 1,'). All dates will be converted to yyyy-mm-ddThh:mm.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Laboratory" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>If a Laboratory performed the analysis, include name and address here.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ProcedureSummary" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Text description of how the measurement was made - instrumentation, logging rate, correction or extrapolation process, how time since circulation was determined, etc. Data provider should indicate QA/QC performed on the data, including individual or institution, time frame and depth of quality check.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DataEntrySource" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Person or organization responsible for data entry.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GasAnalysisType">
+		<xs:complexContent>
+			<xs:extension base="aasg:SampleAnalysisCommonType">
+				<xs:sequence>
+					<xs:element name="CO2_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="H2S_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="NH3_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Ar_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="N2_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CH4_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="H2_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="He_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CO_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="O2_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Shape" type="gml:PointPropertyType">
+						<xs:annotation>
+							<xs:documentation>Added by GIS for WFS service; this element appears in the xml output, but is generated during service deployment from the latitude and longitude, therefore it doesn't appear in the template.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LiquidAnalysisType">
+		<xs:complexContent>
+			<xs:extension base="aasg:SampleAnalysisCommonType">
+				<xs:sequence>
+					<xs:element name="pH" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report in standard pH format.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Li_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Na_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="K_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Ca_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Mg_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SiO2_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="B_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Cl_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="F_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SO4_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="HCO3_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="CO3_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="NH4_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="As_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Rb_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Cs_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Sr_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Ba_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Fe_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Mn_mgL" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report analyte in mg/L.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Cond_umhoscm" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report conductivity in micromhos per centimeter.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="del_18O" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report in molecules per thousand, or “per mil”. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="del_D" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Report in molecules per thousand, or “per mil”. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Shape" type="gml:PointPropertyType">
+						<xs:annotation>
+							<xs:documentation>Added by GIS for WFS service; this element appears in the xml output, but is generated during service deployment from the latitude and longitude, therefore it doesn't appear in the template.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>
